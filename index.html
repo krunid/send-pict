@@ -21,6 +21,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             max-width: 600px;
+            width: 100%;
         }
         h1 {
             color: #333;
@@ -83,6 +84,36 @@
             padding: 10px;
             border-radius: 5px;
         }
+        /* Tab Styles */
+        .tab-menu {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background: #e0e0e0;
+            margin: 0 5px;
+            border-radius: 5px 5px 0 0;
+            transition: background 0.3s;
+        }
+        .tab.active {
+            background: #4CAF50;
+            color: white;
+        }
+        .tab:hover {
+            background: #d0d0d0;
+        }
+        .tab.active:hover {
+            background: #45a049;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
         /* Popup Styles */
         .popup {
             display: none;
@@ -144,29 +175,56 @@
     </div>
     <div class="container">
         <h1>ส่งความสุขสวัสดีทุกวัน</h1>
-        <div class="settings">
-            <label for="telegramToken">Telegram Token:</label>
-            <input type="text" id="telegramToken" placeholder="ใส่ Telegram Bot Token">
-            <label for="chatId">Chat ID:</label>
-            <input type="text" id="chatId" placeholder="ใส่ Chat ID">
-            <label for="autoTime">ตั้งเวลาส่งอัตโนมัติ:</label>
-            <input type="time" id="autoTime">
-            <label for="customMessage">ข้อความกำหนดเอง:</label>
-            <input type="text" id="customMessage" placeholder="ใส่ข้อความสวัสดี">
-            <label for="festivalMessage">เลือกข้อความตามเทศกาล:</label>
-            <select id="festivalMessage">
-                <option value="">เลือกข้อความ (ถ้าไม่ใช้ข้อความกำหนดเอง)</option>
-                <option value="สวัสดีปีใหม่! ขอให้ปีนี้เต็มไปด้วยความสุขและความสำเร็จ! 🎉">ปีใหม่</option>
-                <option value="สุขสันต์วันสงกรานต์! สาดความสุขให้ฉ่ำใจ! 💦">สงกรานต์</option>
-                <option value="สุขสันต์วันเกิด! ขอให้มีความสุขและสุขภาพแข็งแรง! 🎂">วันเกิด</option>
-                <option value="สวัสดีวันวาเลนไทน์! รักนะจุ๊บๆ! 💕">วาเลนไทน์</option>
-                <option value="สวัสดีวันคริสต์มาส! ขอให้อบอุ่นและมีความสุข! 🎄">คริสต์มาส</option>
-            </select>
+        <div class="tab-menu">
+            <div class="tab active" onclick="openTab('telegramSettings')">ตั้งค่า Telegram</div>
+            <div class="tab" onclick="openTab('messageSending')">ส่งข้อความ</div>
         </div>
-        <input type="file" id="imageInput" accept="image/*" multiple onchange="previewImages()">
-        <div id="imagePreviewContainer"></div>
-        <button onclick="sendMessage()">ส่งทันที</button>
-        <button onclick="toggleAuto()">ตั้งค่าการส่งอัตโนมัติ</button>
+        <div id="telegramSettings" class="tab-content active">
+            <div class="settings">
+                <label for="telegramToken">Telegram Token:</label>
+                <input type="text" id="telegramToken" placeholder="ใส่ Telegram Bot Token">
+                <label for="chatId">Chat ID:</label>
+                <input type="text" id="chatId" placeholder="ใส่ Chat ID">
+                <button onclick="saveTelegramSettings()">บันทึกการตั้งค่า</button>
+            </div>
+        </div>
+        <div id="messageSending" class="tab-content">
+            <div class="settings">
+                <label for="autoTime">ตั้งเวลาส่งอัตโนมัติ:</label>
+                <input type="time" id="autoTime">
+                <label for="customMessage">ข้อความกำหนดเอง:</label>
+                <input type="text" id="customMessage" placeholder="ใส่ข้อความสวัสดี">
+                <label for="festivalMessage">เลือกข้อความตามเทศกาล:</label>
+                <select id="festivalMessage">
+                    <option value="">เลือกข้อความ (ถ้าไม่ใช้ข้อความกำหนดเอง)</option>
+                    <optgroup label="ปีใหม่">
+                        <option value="สวัสดีปีใหม่! ขอให้ปีนี้เต็มไปด้วยความสุขและความสำเร็จ! 🎉">สุขสันต์ปีใหม่</option>
+                        <option value="สวัสดีปีใหม่! ขอให้ร่ำรวยเงินทองและสุขภาพดี! 💰">ขอให้รวย</option>
+                        <option value="สวัสดีปีใหม่! ขอให้พบเจอแต่สิ่งดีๆ ตลอดปี! 🌟">สิ่งดีๆ ตลอดปี</option>
+                    </optgroup>
+                    <optgroup label="สงกรานต์">
+                        <option value="สุขสันต์วันสงกรานต์! สาดความสุขให้ฉ่ำใจ! 💦">สาดความสุข</option>
+                        <option value="สุขสันต์วันสงกรานต์! ขอให้สนุกและปลอดภัย! 🪣">สนุกและปลอดภัย</option>
+                    </optgroup>
+                    <optgroup label="วันเกิด">
+                        <option value="สุขสันต์วันเกิด! ขอให้มีความสุขและสุขภาพแข็งแรง! 🎂">สุขสันต์วันเกิด</option>
+                        <option value="สุขสันต์วันเกิด! ขอให้อายุยืนและสมหวังทุกประการ! 🎈">อายุยืน</option>
+                    </optgroup>
+                    <optgroup label="วาเลนไทน์">
+                        <option value="สวัสดีวันวาเลนไทน์! รักนะจุ๊บๆ! 💕">รักนะจุ๊บๆ</option>
+                        <option value="สวัสดีวันวาเลนไทน์! ขอให้ความรักเบ่งบาน! 🌹">ความรักเบ่งบาน</option>
+                    </optgroup>
+                    <optgroup label="คริสต์มาส">
+                        <option value="สวัสดีวันคริสต์มาส! ขอให้อบอุ่นและมีความสุข! 🎄">สุขสันต์คริสต์มาส</option>
+                        <option value="สวัสดีวันคริสต์มาส! ขอให้ได้ของขวัญถูกใจ! 🎁">ของขวัญถูกใจ</option>
+                    </optgroup>
+                </select>
+            </div>
+            <input type="file" id="imageInput" accept="image/*" multiple onchange="previewImages()">
+            <div id="imagePreviewContainer"></div>
+            <button onclick="sendMessage()">ส่งทันที</button>
+            <button onclick="toggleAuto()">ตั้งค่าการส่งอัตโนมัติ</button>
+        </div>
         <div id="status">สถานะ: <span id="autoStatus">ปิด</span></div>
         <div id="logContainer"></div>
     </div>
@@ -192,7 +250,6 @@
             popup.style.display = 'block';
             popupOverlay.style.display = 'block';
 
-            // Auto close after 3 seconds
             setTimeout(hidePopup, 3000);
         }
 
@@ -204,6 +261,18 @@
             popupOverlay.style.display = 'none';
         }
 
+        // Open tab
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab[onclick="openTab('${tabId}')"]`).classList.add('active');
+        }
+
         // Get random greeting
         function getRandomGreeting() {
             const customMessage = document.getElementById('customMessage').value;
@@ -213,28 +282,41 @@
             return GREETINGS[Math.floor(Math.random() * GREETINGS.length)];
         }
 
-        // Save settings to localStorage
-        function saveSettings() {
+        // Save Telegram settings
+        function saveTelegramSettings() {
             const token = document.getElementById('telegramToken').value;
             const chatId = document.getElementById('chatId').value;
-            const autoTime = document.getElementById('autoTime').value;
-            const customMessage = document.getElementById('customMessage').value;
-            if (token) localStorage.setItem('telegramToken', token);
-            if (chatId) localStorage.setItem('chatId', chatId);
-            if (autoTime) localStorage.setItem('autoTime', autoTime);
-            if (customMessage) localStorage.setItem('customMessage', customMessage);
+            if (token && chatId) {
+                localStorage.setItem('telegramToken', token);
+                localStorage.setItem('chatId', chatId);
+                showPopup('บันทึกการตั้งค่า Telegram สำเร็จ!', 'success');
+            } else {
+                showPopup('กรุณาใส่ Telegram Token และ Chat ID', 'error');
+            }
         }
 
-        // Load settings from localStorage
+        // Save message settings
+        function saveMessageSettings() {
+            const autoTime = document.getElementById('autoTime').value;
+            const customMessage = document.getElementById('customMessage').value;
+            const festivalMessage = document.getElementById('festivalMessage').value;
+            if (autoTime) localStorage.setItem('autoTime', autoTime);
+            if (customMessage) localStorage.setItem('customMessage', customMessage);
+            if (festivallocalStorage.setItem('festivalMessage', festivalMessage);
+        }
+
+        // Load settings
         function loadSettings() {
             const token = localStorage.getItem('telegramToken');
             const chatId = localStorage.getItem('chatId');
             const autoTime = localStorage.getItem('autoTime');
             const customMessage = localStorage.getItem('customMessage');
+            const festivalMessage = localStorage.getItem('festivalMessage');
             if (token) document.getElementById('telegramToken').value = token;
             if (chatId) document.getElementById('chatId').value = chatId;
             if (autoTime) document.getElementById('autoTime').value = autoTime;
             if (customMessage) document.getElementById('customMessage').value = customMessage;
+            if (festivalMessage) document.getElementById('festivalMessage').value = festivalMessage;
         }
 
         // Preview multiple images
@@ -268,7 +350,7 @@
             });
         }
 
-        // Get random image from stored images
+        // Get random image
         async function getRandomImage(file = null) {
             if (file) {
                 return file;
@@ -336,7 +418,7 @@
 
         // Send message immediately
         async function sendMessage() {
-            saveSettings();
+            saveMessageSettings();
             const fileInput = document.getElementById('imageInput');
             const file = fileInput.files[0];
             const greeting = getRandomGreeting();
@@ -350,7 +432,7 @@
 
         // Toggle auto send
         function toggleAuto() {
-            saveSettings();
+            saveMessageSettings();
             let autoSend = localStorage.getItem('autoSend') === 'true';
             autoSend = !autoSend;
             localStorage.setItem('autoSend', autoSend);
@@ -362,7 +444,7 @@
             }
         }
 
-        // Check and send message automatically at set time
+        // Check and send message automatically
         function startAutoSend() {
             setInterval(async () => {
                 const now = new Date();
@@ -378,7 +460,8 @@
                         addLog(`ส่งอัตโนมัติ: ${greeting}`);
                     }
                 }
-            }, 60000); // Check繋
+            }, 60000); // Check every minute
+        }
 
         // Initialize settings and auto send status
         window.onload = () => {
